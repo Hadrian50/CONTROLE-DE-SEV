@@ -70,6 +70,9 @@ const SevCard: React.FC<{ sev: Sev; vehicle?: Vehicle; onComplete: () => void }>
         <div>
           <span className="font-semibold text-gray-400 block">Veículo</span>
           <span className="text-gray-200 font-mono">{vehicle?.plate || 'N/A'}</span>
+          {sev.trailerPlate && (
+            <span className="text-gray-300 font-mono block text-sm">+ {sev.trailerPlate}</span>
+          )}
         </div>
         <div>
           <span className="font-semibold text-gray-400 block">Validade</span>
@@ -92,6 +95,12 @@ const SevCard: React.FC<{ sev: Sev; vehicle?: Vehicle; onComplete: () => void }>
           <span className="text-gray-200">{new Date(sev.operationDate).toLocaleDateString('pt-BR')}</span>
         </div>
       </div>
+       {sev.observations && (
+        <div className="mt-4 pt-3 border-t border-gray-700">
+          <p className="font-semibold text-gray-400 text-sm">Observações:</p>
+          <p className="text-gray-300 text-sm whitespace-pre-wrap bg-gray-900/50 p-2 rounded-md mt-1">{sev.observations}</p>
+        </div>
+      )}
        {currentStatus === SevStatus.Active && (
         <div className="mt-4 text-right">
             <button

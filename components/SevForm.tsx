@@ -17,16 +17,17 @@ const SevForm: React.FC<SevFormProps> = ({ vehicles, activeVehicleIds, addSev, o
     shipName: '',
     workPlanNumber: '',
     vehicleId: '',
-    useTrailer: false,
+    trailerPlate: '',
     requester: '',
     sevNumber: '',
     expiryDate: '',
     operator: '',
+    observations: '',
   });
 
   const [error, setError] = useState('');
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;
     const isCheckbox = type === 'checkbox';
     setFormState(prev => ({
@@ -55,16 +56,19 @@ const SevForm: React.FC<SevFormProps> = ({ vehicles, activeVehicleIds, addSev, o
         shipName: '',
         workPlanNumber: '',
         vehicleId: '',
-        useTrailer: false,
+        trailerPlate: '',
         requester: '',
         sevNumber: '',
         expiryDate: '',
         operator: '',
+        observations: '',
     });
     onSuccess();
   };
   
   const availableVehicles = vehicles.filter(v => !activeVehicleIds.has(v.id));
+  const trailerPlates = Array.from(new Set(vehicles.map(v => v.trailerPlate).filter(Boolean))) as string[];
+
 
   return (
     <div className="bg-gray-800 p-6 rounded-lg shadow-xl">
@@ -103,6 +107,15 @@ const SevForm: React.FC<SevFormProps> = ({ vehicles, activeVehicleIds, addSev, o
               <input type="datetime-local" name="expiryDate" value={formState.expiryDate} onChange={handleInputChange} className="mt-1 block w-full bg-gray-700 border-gray-600 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 text-white" />
             </div>
             <div>
+              <label htmlFor="trailerPlate" className="block text-sm font-medium text-gray-300">Reboque/Placa (Opcional)</label>
+              <select name="trailerPlate" id="trailerPlate" value={formState.trailerPlate} onChange={handleInputChange} className="mt-1 block w-full bg-gray-700 border-gray-600 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 text-white">
+                <option value="">Selecione um reboque</option>
+                {trailerPlates.map(plate => (
+                  <option key={plate} value={plate}>{plate}</option>
+                ))}
+              </select>
+            </div>
+            <div>
               <label htmlFor="requester" className="block text-sm font-medium text-gray-300">Solicitante</label>
               <input type="text" name="requester" value={formState.requester} onChange={handleInputChange} className="mt-1 block w-full bg-gray-700 border-gray-600 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 text-white" />
             </div>
@@ -110,16 +123,25 @@ const SevForm: React.FC<SevFormProps> = ({ vehicles, activeVehicleIds, addSev, o
               <label htmlFor="operator" className="block text-sm font-medium text-gray-300">Operador</label>
               <input type="text" name="operator" value={formState.operator} onChange={handleInputChange} className="mt-1 block w-full bg-gray-700 border-gray-600 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 text-white" />
             </div>
-            <div className="flex items-center pt-6">
-                <input id="useTrailer" name="useTrailer" type="checkbox" checked={formState.useTrailer} onChange={handleInputChange} className="h-4 w-4 text-green-600 bg-gray-700 border-gray-600 rounded focus:ring-green-500" />
-                <label htmlFor="useTrailer" className="ml-2 block text-sm text-gray-300">Uso de Reboque</label>
-            </div>
+        </div>
+
+        <div>
+          <label htmlFor="observations" className="block text-sm font-medium text-gray-300">Observações (Opcional)</label>
+          <textarea
+            id="observations"
+            name="observations"
+            value={formState.observations}
+            onChange={handleInputChange}
+            rows={3}
+            className="mt-1 block w-full bg-gray-700 border-gray-600 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 text-white"
+            placeholder="Detalhes adicionais, como motivo da entrada, contato, etc."
+          />
         </div>
 
         {error && <p className="text-red-400 text-sm mt-2">{error}</p>}
 
         <button type="submit" className="w-full flex justify-center items-center gap-2 bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-md transition-colors duration-300 disabled:bg-gray-500" disabled={availableVehicles.length === 0 && vehicles.length > 0}>
-            <PlusIcon /> {availableVehicles.length === 0 && vehicles.length > 0 ? "Nenhum Veículo Disponível" : "Criar SEV"}
+            <PlusIcon /> {availableVehicles.length === 0 && vehicles.length > 0 ? "Nenhum Veículo Disponível" : "Adicionar SEV"}
         </button>
       </form>
     </div>

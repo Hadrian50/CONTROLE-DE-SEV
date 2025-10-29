@@ -11,6 +11,15 @@ const App: React.FC = () => {
   const [vehicles, setVehicles] = useLocalStorage<Vehicle[]>('sev-vehicles', []);
   const [sevs, setSevs] = useLocalStorage<Sev[]>('sev-requests', []);
   const [notification, setNotification] = useState<string | null>(null);
+  const [mode, setMode] = useState('admin');
+
+  useEffect(() => {
+    // Check for entry-only mode from URL
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('mode') === 'entry') {
+      setMode('entry');
+    }
+  }, []);
 
   useEffect(() => {
     if (notification) {
@@ -70,9 +79,8 @@ const App: React.FC = () => {
     );
   }, [sevs]);
 
-  return (
-    <div className="min-h-screen bg-gray-900 text-gray-100 p-4 sm:p-6 lg:p-8">
-      <div className="max-w-7xl mx-auto">
+  const renderAdminView = () => (
+     <div className="max-w-7xl mx-auto">
         <header className="text-center mb-10">
           <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-green-400">
             CONTROLE DE VEÍCULOS E SEV
@@ -102,6 +110,32 @@ const App: React.FC = () => {
           </div>
         </main>
       </div>
+  );
+
+  const renderEntryView = () => (
+    <div className="flex flex-col items-center justify-center min-h-[80vh]">
+      <header className="text-center mb-10">
+          <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-green-400">
+            CONTROLE DE VEÍCULOS E SEV
+          </h1>
+          <p className="mt-2 text-lg text-gray-400">
+            Modo de Inserção de Dados
+          </p>
+      </header>
+      <main className="w-full max-w-2xl">
+        <SevForm 
+          vehicles={vehicles} 
+          activeVehicleIds={activeVehicleIds}
+          addSev={addSev}
+          onSuccess={() => showNotification('SEV adicionada com sucesso!')}
+        />
+      </main>
+    </div>
+  );
+
+  return (
+    <div className="min-h-screen bg-gray-900 text-gray-100 p-4 sm:p-6 lg:p-8">
+      {mode === 'admin' ? renderAdminView() : renderEntryView()}
 
       {notification && (
         <div className="fixed bottom-5 right-5 bg-gray-700 text-white py-2 px-4 rounded-lg shadow-lg animate-fade-in-out">

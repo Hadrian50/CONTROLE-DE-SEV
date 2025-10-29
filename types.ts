@@ -17,10 +17,11 @@ export interface Sev {
   shipName: string;
   workPlanNumber: string;
   vehicleId: string;
-  useTrailer: boolean;
+  trailerPlate?: string;
   requester: string;
   sevNumber: string;
   expiryDate: string;
   operator: string;
   status: SevStatus;
+  observations?: string;
 }
