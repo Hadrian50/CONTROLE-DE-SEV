@@ -1,0 +1,17 @@
+
+{
+  "short_name": "Controle SEV",
+  "name": "Controle de Veículos e SEV",
+  "description": "Um aplicativo para controlar Solicitações de Entrada de Veículos (SEV).",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "192x192 512x512"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#111827",
+  "background_color": "#111827"
+}

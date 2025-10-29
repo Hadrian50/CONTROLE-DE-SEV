@@ -1,0 +1,5 @@
+{
+  "name": "Controle de Veículos e SEV",
+  "description": "Um aplicativo para controlar Solicitações de Entrada de Veículos (SEV), gerenciar uma frota de veículos e rastrear a disponibilidade de cada um para operações.",
+  "requestFramePermissions": []
+}
